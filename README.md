@@ -1,4 +1,4 @@
-# iot_tp4_elmotacime_khalifa
+# weathermap
 
 ## Project setup
 ```

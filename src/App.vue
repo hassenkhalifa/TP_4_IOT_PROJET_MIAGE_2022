@@ -1,5 +1,6 @@
 <template>
-<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div>
+  <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" >
       <img src="./assets/globe.png" width="28" height="30">
@@ -7,17 +8,15 @@
   </div>
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item">
-        World Map
-      </a>
-      <a class="navbar-item">
-        Ville
-      </a>
+      <router-link class="navbar-item" to="/">World Map</router-link> 
+      <router-link class="navbar-item" to="/Ville">Ville</router-link>
     </div>
 
-    
+     
   </div>
 </nav>
+<router-view/>
+  </div>
 </template>
 
 <script>

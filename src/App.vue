@@ -13,7 +13,7 @@
         </div>
       </div>
     </nav>
-    <router-view v-bind:Villes="Villes" />
+    <router-view  />
   </div>
 </template>
 

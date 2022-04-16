@@ -22,8 +22,12 @@ export default {
   name: "App",
   data: function () {
     return {
-      Villes: ["Grasse", "Nice", "Monaco", "Metz"],
+      
     };
+  },
+  
+  methods: {
+    
   },
 };
 </script>

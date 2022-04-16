@@ -9,9 +9,7 @@
 <script>
 export default {
   name: 'Map',
-//   props: {
-//     msg: String
-//   }
+
 }
 </script>
 

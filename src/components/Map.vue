@@ -9,36 +9,35 @@
     @update:center="centerUpdated"
   >
     <l-tile-layer :url="url"> </l-tile-layer>
-    
+    <point v-for="point in points" :key="point.id" :point="point"> </point>
   </l-map>
 </template>
 
 <script>
 import { LMap, LTileLayer } from "vue2-leaflet";
-
+import point from "./Marker";
 import "leaflet/dist/leaflet.css";
 export default {
   components: {
     LMap,
     LTileLayer,
+    point
   },
   data() {
     return {
       key: "9c0f6b0bd3e3abbcc0c9ad3bdee77677",
-      url: "",
-      layer: [
-        { name: "clouds_new" },
-        { name: "precipitation_new" },
-        { name: "pressure_new" },
-        { name: "wind_new" },
-        { name: "temp_new" },
-      ],
+      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
       center: [49.1193089, 6.1757156],
       zoom: 12,
+      points: [
+        {
+          id: 1,
+          imageUrl: "https://cdn-icons-png.flaticon.com/512/2540/2540201.png",
+          coordinates: [49.11491, 6.17881],
+        },
+      ],
     };
-  },
-  mounted() {
-    this.setURL();
   },
   methods: {
     zoomUpdated(zoom) {
@@ -46,13 +45,6 @@ export default {
     },
     centerUpdated(center) {
       this.center = center;
-    },
-    setURL() {
-      this.url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-
-
-      //this.url = `https://tile.openweathermap.org/map/${this.layer[0].name}/{z}/{x}/{y}.png?appid=${this.key}`;
-      // this.url=`http://maps.openweathermap.org/maps/2.0/weather/PA0/{z}/{x}/{y}appid=${this.key}`
     },
   },
 };

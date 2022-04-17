@@ -75,31 +75,66 @@ void publishinfo(String temps, String light, String Ip, String Mac, String SSiD,
 
   doc["info"]["loc"] = "Grasse";
   doc["info"]["user"] = "21711996";
-  doc["info"]["uptime"] = "getUptime()";
-  doc["info"]["ssid"] = SSiD;
-  doc["info"]["ident"] = Mac;
-  doc["info"]["ip"] = Ip;
-
-  doc["reporthost"]["target_ip"] = "target_ip";
-  doc["reporthost"]["target_port"] = "target_port";
-  doc["reporthost"]["sp"] = "target_sp";
-  
-  doc["regul"]["threshold"] = "DAY_LIGHT";
-  doc["regul"]["sbn"] = "TEMP_NIGHT_LOW";
-  doc["regul"]["shn"] = "TEMP_NIGHT_HIGH";
-  doc["regul"]["sbj"] = "TEMP_DAY_LOW";
-  doc["regul"]["shj"] = "TEMP_DAY_HIGH";
-
-  doc["lat"] = lat;
-  doc["lgn"] = lgn;
+//  doc["info"]["uptime"] = "getUptime()";
+//  doc["info"]["ssid"] = SSiD;
+//  doc["info"]["ident"] = Mac;
+//  doc["info"]["ip"] = Ip;
+//
+//  doc["reporthost"]["target_ip"] = "target_ip";
+//  doc["reporthost"]["target_port"] = "target_port";
+//  doc["reporthost"]["sp"] = "target_sp";
+//  
+//  doc["regul"]["threshold"] = "DAY_LIGHT";
+//  doc["regul"]["sbn"] = "TEMP_NIGHT_LOW";
+//  doc["regul"]["shn"] = "TEMP_NIGHT_HIGH";
+//  doc["regul"]["sbj"] = "TEMP_DAY_LOW";
+//  doc["regul"]["shj"] = "TEMP_DAY_HIGH";
+//
+//  doc["lat"] = lat;
+//  doc["lgn"] = lgn;
   String json;
   serializeJson(doc, json);
-  char jsonChar[100];
+  char jsonChar[200];
 
-  json.toCharArray(jsonChar, 100);
+  json.toCharArray(jsonChar, 200);
   client.publish(topic, jsonChar);
   delay(2000);
 }
+// void publishinfo(String temps, String light, String Ip, String Mac, String SSiD, String CoolerStatus, String HeaterStatus) {
+//   DynamicJsonDocument doc(2048);
+//   doc["status"]["temperature"] = temps;
+//   doc["status"]["light"] = light;
+//   doc["status"]["ledCooler"] = CoolerStatus;
+//   doc["status"]["ledHeater"] = HeaterStatus;
+//   doc["status"]["running"] = "RUNNING";
+
+//   doc["info"]["loc"] = "Grasse";
+//   doc["info"]["user"] = "21711996";
+//   doc["info"]["uptime"] = "getUptime()";
+//   doc["info"]["ssid"] = SSiD;
+//   doc["info"]["ident"] = Mac;
+//   doc["info"]["ip"] = Ip;
+
+//   doc["reporthost"]["target_ip"] = "target_ip";
+//   doc["reporthost"]["target_port"] = "target_port";
+//   doc["reporthost"]["sp"] = "target_sp";
+  
+//   doc["regul"]["threshold"] = "DAY_LIGHT";
+//   doc["regul"]["sbn"] = "TEMP_NIGHT_LOW";
+//   doc["regul"]["shn"] = "TEMP_NIGHT_HIGH";
+//   doc["regul"]["sbj"] = "TEMP_DAY_LOW";
+//   doc["regul"]["shj"] = "TEMP_DAY_HIGH";
+
+//   doc["lat"] = lat;
+//   doc["lgn"] = lgn;
+//   String json;
+//   serializeJson(doc, json);
+//   char jsonChar[100];
+
+//   json.toCharArray(jsonChar, 100);
+//   client.publish(topic, jsonChar);
+//   delay(2000);
+// }
 
 void callback(char *topic, byte *payload, unsigned int length) {
   Serial.print("Message arrived in topic: ");

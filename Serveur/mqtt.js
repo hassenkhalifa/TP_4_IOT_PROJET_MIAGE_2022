@@ -1,8 +1,10 @@
 var mqtt = require('mqtt')
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb+srv://hassen:kO0IgBWVGgzWmaRZ@cluster0.1blp0.mongodb.net/Datamonitoring?retryWrites=true&w=majority";
+var url = "mongodb+srv://hassen:HaldQSCGIUdOaW8f@cluster0.1blp0.mongodb.net/Datamonitoring?retryWrites=true&w=majority";
 
-const mqtt_url = 'http://test.mosquitto.org:1883'
+const mqtt_url = 'http://test.mosquitto.org:1883';
+const topic = 'iot/M1Miage2022';
+
 var options = {
     clientId: "deathstar",
     username: "darkvador",
@@ -12,14 +14,9 @@ var options = {
 var client = mqtt.connect(mqtt_url, options);
 
 
-
-
-
-
-
 // on mqtt conect subscribe on tobic test 
 client.on('connect', function () {
-    client.subscribe('iot/M1Miage2022', function (err) {
+    client.subscribe(topic, function (err) {
         if (err)
             console.log(err)
         if (!err)
@@ -30,7 +27,7 @@ client.on('connect', function () {
 //when recive message 
 client.on('message', function (topic, message) {
     //json_check(message)
-    console.log("json_check = " +JSON.stringify(message) );
+    console.log("json_check = " + JSON.stringify(message));
     json_check(message)
 })
 
@@ -49,7 +46,7 @@ function Mongo_insert(data) {
     MongoClient.connect(url, function (err, db) {
         if (err) throw err;
         var dbo = db.db("DataMonitoring");
-        dbo.collection("Data").insertOne(data, function (err, res) {
+        dbo.collection("Data").insertOne(data, function (err) {
             if (err) throw err;
             db.close();
         });

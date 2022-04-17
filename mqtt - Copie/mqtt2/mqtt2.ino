@@ -31,11 +31,11 @@ DallasTemperature tempSensor(&oneWire) ;
 //const char *mqtt_password = "6poD2R2";
 //const int mqtt_port = 1883;
 
-const char *mqtt_broker = "o66b0ca7-internet-facing-d84cedade336f3f6.elb.eu-central-1.amazonaws.com";
+const char *mqtt_broker = "j20ae20e.us-east-1.emqx.cloud";
 const char *topic = "esp32/test";
 const char *mqtt_username = "HassenTest";
 const char *mqtt_password = "12345678";
-const int mqtt_port = 1883;
+const int mqtt_port = 15304;
 
 
 WiFiClient espClient;

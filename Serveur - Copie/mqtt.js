@@ -1,9 +1,9 @@
 const mqtt = require('mqtt')
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb+srv://hassen:kO0IgBWVGgzWmaRZ@cluster0.1blp0.mongodb.net/Datamonitoring?retryWrites=true&w=majority";
+var url = "mongodb+srv://hassen:HaldQSCGIUdOaW8f@cluster0.1blp0.mongodb.net/Datamonitoring?retryWrites=true&w=majority";
 
-const host = 'o66b0ca7-internet-facing-d84cedade336f3f6.elb.eu-central-1.amazonaws.com'
-const port = '1883'
+const host = 'j20ae20e.us-east-1.emqx.cloud'
+const port = '15304'
 const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
 
 const connectUrl = `mqtt://${host}:${port}`
@@ -44,7 +44,7 @@ function Mongo_insert(data) {
   MongoClient.connect(url, function (err, db) {
       if (err) throw err;
       var dbo = db.db("DataMonitoring");
-      dbo.collection("Data").insertOne(data, function (err, res) {
+      dbo.collection("Data").insertOne(data, function (err) {
           if (err) throw err;
           db.close();
       });

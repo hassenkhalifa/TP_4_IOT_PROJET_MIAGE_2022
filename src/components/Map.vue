@@ -21,13 +21,12 @@ export default {
   components: {
     LMap,
     LTileLayer,
-    point
+    point,
   },
   data() {
     return {
       key: "9c0f6b0bd3e3abbcc0c9ad3bdee77677",
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-
       center: [49.1193089, 6.1757156],
       zoom: 12,
       points: [
@@ -37,7 +36,13 @@ export default {
           coordinates: [49.11491, 6.17881],
         },
       ],
+      users: {},
     };
+  },
+
+  created() {
+    this.getUserEsp();
+    console.log();
   },
   methods: {
     zoomUpdated(zoom) {
@@ -45,6 +50,39 @@ export default {
     },
     centerUpdated(center) {
       this.center = center;
+    },
+    getUserEsp() {
+      var data = JSON.stringify({
+        collection: "Data",
+        filter: {
+          "info.user": "dfdfddf11996",
+        },
+        database: "DataMonitoring",
+        dataSource: "Cluster0",
+        projection: {
+          info: 1,
+        },
+      });
+
+      fetch(
+        "http://localhost:8080/app/data-grsmg/endpoint/data/beta/action/find",
+        {
+          method: "POST",
+          body: data,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Request-Headers": "*",
+            "api-key":
+              "pP3dYqzJQwzxhlj24CfIKPTHAy8LcAf4W2YdpRXbvmEXhh8LHLNOGSAabuO5QS7k",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((json) => {
+          console.log(json)
+          this.users=json;
+          console.log('users : '+JSON.stringify(this.users))
+        });
     },
   },
 };

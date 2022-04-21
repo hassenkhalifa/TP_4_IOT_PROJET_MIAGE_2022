@@ -23,23 +23,41 @@ export default {
     LTileLayer,
     point,
   },
+  
+  props: {
+    idUser: Array,
+  },
   data() {
     return {
       key: "9c0f6b0bd3e3abbcc0c9ad3bdee77677",
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       center: [49.1193089, 6.1757156],
-      zoom: 1,
-      points: [
-      ],
+      zoom: 5,
+      points: [],
       users: {},
+      uniqueId: [],
     };
   },
 
   created() {
     this.getUserEsp();
     console.log();
+    console.log("iduser  map : ", this.idUser);
+    setTimeout(() => {
+      this.getUniqueID();
+    }, 2000);
+    
   },
   methods: {
+    getUniqueID() {
+      this.idUser.forEach((c) => {
+        if (!this.uniqueId.includes(c)) {
+          this.uniqueId.push(c);
+        }
+      });
+      console.log("uniqueid : " + this.uniqueId);
+    },
+
     zoomUpdated(zoom) {
       this.zoom = zoom;
     },
@@ -83,16 +101,13 @@ export default {
               parseFloat(json.documents[0].status.lat),
               parseFloat(json.documents[0].status.lgn),
             ],
-        temperature: json.documents[0].status.temperature,
-        lumens:json.documents[0].status.light,
+            temperature: json.documents[0].status.temperature,
+            lumens: json.documents[0].status.light,
             loc: json.documents[0].info.loc,
-            user:json.documents[0].info.user
+            user: json.documents[0].info.user,
           };
-         this.points.push(obj);
+          this.points.push(obj);
           console.log("points : " + JSON.stringify(obj));
-          // this.users = json;
-          // console.log("users : " + JSON.stringify(this.users));
-          //this.getPoints();
         });
     },
     getPoints() {

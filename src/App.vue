@@ -13,7 +13,7 @@
         </div>
       </div>
     </nav>
-    <router-view  />
+    <router-view :idUser="idUser" />
   </div>
 </template>
 
@@ -22,12 +22,49 @@ export default {
   name: "App",
   data: function () {
     return {
-      
+      idUser: [],
+      uniqueId: [],
     };
   },
-  
+  created() {
+    setTimeout(() => {
+      this.getID();
+    }, 1000);
+  },
   methods: {
-    
+    getID() {
+      var data = JSON.stringify({
+        collection: "Data",
+        database: "DataMonitoring",
+        dataSource: "Cluster0",
+        projection: {
+          status: 1,
+          info: 1,
+        },
+      });
+
+      fetch(
+        "http://localhost:8080/app/data-grsmg/endpoint/data/beta/action/find",
+        {
+          method: "POST",
+          body: data,
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Request-Headers": "*",
+            "api-key":
+              "pP3dYqzJQwzxhlj24CfIKPTHAy8LcAf4W2YdpRXbvmEXhh8LHLNOGSAabuO5QS7k",
+          },
+        }
+      )
+        .then((response) => response.json())
+        .then((json) => {
+          console.log("json legth : ", json.documents.length);
+          for (let index = 0; index < json.documents.length; index++) {
+            this.idUser.push(json.documents[index].info.user);
+          }
+          console.log("idusers : " + this.idUser);
+        });
+    },
   },
 };
 </script>

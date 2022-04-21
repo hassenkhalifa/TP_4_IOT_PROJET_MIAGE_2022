@@ -6,7 +6,18 @@
     <l-popup>
       <pre>
 GPS : lat {{ point.coordinates[0] }} lgn {{ point.coordinates[1] }}
-      
+      </pre>
+      <pre>
+localisation :  {{ point.loc }} 
+      </pre>
+      <pre>
+utilisateur :  {{ point.user }} 
+      </pre>
+      <pre>
+temperature : {{ point.temperature }}
+      </pre>
+      <pre>
+Lumens: {{ point.lumens }}
       </pre>
     </l-popup>
   </l-marker>

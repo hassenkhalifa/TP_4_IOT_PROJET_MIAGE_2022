@@ -28,13 +28,8 @@ export default {
       key: "9c0f6b0bd3e3abbcc0c9ad3bdee77677",
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       center: [49.1193089, 6.1757156],
-      zoom: 12,
+      zoom: 1,
       points: [
-        {
-          id: 1,
-          imageUrl: "https://cdn-icons-png.flaticon.com/512/2540/2540201.png",
-          coordinates: [49.11491, 6.17881],
-        },
       ],
       users: {},
     };
@@ -60,6 +55,7 @@ export default {
         database: "DataMonitoring",
         dataSource: "Cluster0",
         projection: {
+          status: 1,
           info: 1,
         },
       });
@@ -79,10 +75,38 @@ export default {
       )
         .then((response) => response.json())
         .then((json) => {
-          console.log(json)
-          this.users=json;
-          console.log('users : '+JSON.stringify(this.users))
+          console.log(json);
+          const obj = {
+            id: json.documents[0].info.user,
+            imageUrl: "https://cdn-icons-png.flaticon.com/512/2540/2540201.png",
+            coordinates: [
+              parseFloat(json.documents[0].status.lat),
+              parseFloat(json.documents[0].status.lgn),
+            ],
+        temperature: json.documents[0].status.temperature,
+        lumens:json.documents[0].status.light,
+            loc: json.documents[0].info.loc,
+            user:json.documents[0].info.user
+          };
+         this.points.push(obj);
+          console.log("points : " + JSON.stringify(obj));
+          // this.users = json;
+          // console.log("users : " + JSON.stringify(this.users));
+          //this.getPoints();
         });
+    },
+    getPoints() {
+      const obj = {
+        id: this.users.documents[0].info.user,
+        imageUrl: "https://cdn-icons-png.flaticon.com/512/2540/2540201.png",
+        coordinates: [
+          parseFloat(this.users.documents[0].status.lat),
+          parseFloat(this.users.documents[0].status.lgn),
+        ],
+        loc: this.users.documents[0].info.loc,
+      };
+      this.points = obj;
+      console.log("points : " + JSON.stringify(obj));
     },
   },
 };

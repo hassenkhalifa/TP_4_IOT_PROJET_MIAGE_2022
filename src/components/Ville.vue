@@ -1,27 +1,23 @@
 <template>
-  <section class="position">
-    
-    <b-field label="Selectionner une ville" >
-      <b-input v-model="nom"></b-input>
-    </b-field>
-    
+  <section>
+    <div class="position">
+      <b-field label="Selectionner une ville" class="search-box">
+        <b-input v-model="nom"></b-input>
+      </b-field>
+
       <b-button @click="Datafetch">lancer la recherche</b-button>
-   
-    <div v-if="notEmpty" class="block">
-      <pre>
-      <b-tag rounded type="is-info" size="is-large"
-        >Ville : {{ temps.name }}</b-tag
-      >
-      <b-tag rounded type="is-info" size="is-large"
-        >Pays : {{ temps.sys.country || null }}</b-tag
-      >
-      <b-tag rounded type="is-info" size="is-large"
-        >Temps : {{ temps.weather[0].main }}</b-tag
-      >
-      <b-tag rounded type="is-info" size="is-large"
-        >Temperature : {{ Math.round(temps.main.temp) }}</b-tag
-      >
-      </pre>
+    </div>
+    <div v-if="notEmpty">
+      <div class="location-box">
+        <div class="location">
+          {{ temps.name }}, {{ temps.sys.country || null }}
+        </div>
+
+        <div class="weather-box">
+          <div class="temp">{{ Math.round(temps.main.temp) }} C°</div>
+          <div class="weather">{{ temps.weather[0].main }}</div>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -65,14 +61,46 @@ export default {
 
 
 <style scoped>
-.position{
-  position:absolute;
-    left:20%;
-    top:5%;
-    width:30%;
-
+.position {
+  position: absolute;
+  left: 25%;
+  display: block;
 }
-.block{
-  margin-block: 5 px;
+.search-box {
+  width: 50%;
+  margin-bottom: 30px;
+  align-items: center;
+}
+
+.location-box .location {
+  color: rgb(0, 0, 0);
+  font-size: 32px;
+  font-weight: 500;
+  text-align: center;
+  text-shadow: 1px 3px rgba(0, 0, 0, 0.25);
+  margin-top: 125px;
+}
+
+.weather-box {
+  text-align: center;
+}
+.weather-box .temp {
+  display: inline-block;
+  padding: 10px 25px;
+  color: rgb(0, 0, 0);
+  font-size: 102px;
+  font-weight: 900;
+  text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  margin: 30px 0px;
+  box-shadow: 3px 6px rgba(0, 0, 0, 0.25);
+}
+.weather-box .weather {
+  color: rgb(0, 0, 0);
+  font-size: 48px;
+  font-weight: 700;
+  font-style: italic;
+  text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
 }
 </style>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Ville from '../components/Ville.vue'
 import Map from '../components/Map.vue'
+import Dashboard from '../components/Dashboard.vue'
 
 Vue.use(VueRouter)
 
@@ -15,6 +16,11 @@ const routes = [
     path: '/Ville',
     name: 'Ville',
     component: Ville
+  },
+  {
+    path: '/Dashboard',
+    name: 'Dashboard',
+    component: Dashboard
   }
 ]
 

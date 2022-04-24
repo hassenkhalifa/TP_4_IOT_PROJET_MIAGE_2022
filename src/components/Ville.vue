@@ -1,12 +1,14 @@
 <template>
-  <section>
-    <b-field label="Name">
+  <section class="position">
+    
+    <b-field label="Selectionner une ville" >
       <b-input v-model="nom"></b-input>
     </b-field>
-    <section>
-      <b-button @click="Datafetch">Click Me</b-button>
-    </section>
-    <div v-if="notEmpty">
+    
+      <b-button @click="Datafetch">lancer la recherche</b-button>
+   
+    <div v-if="notEmpty" class="block">
+      <pre>
       <b-tag rounded type="is-info" size="is-large"
         >Ville : {{ temps.name }}</b-tag
       >
@@ -19,6 +21,7 @@
       <b-tag rounded type="is-info" size="is-large"
         >Temperature : {{ Math.round(temps.main.temp) }}</b-tag
       >
+      </pre>
     </div>
   </section>
 </template>
@@ -62,4 +65,14 @@ export default {
 
 
 <style scoped>
+.position{
+  position:absolute;
+    left:20%;
+    top:5%;
+    width:30%;
+
+}
+.block{
+  margin-block: 5 px;
+}
 </style>

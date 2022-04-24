@@ -8,8 +8,9 @@
     @update:zoom="zoomUpdated"
     @update:center="centerUpdated"
   >
+    <b-button type="is-primary" class="position" icon-left="refresh" @click="getUserEsp()"> Actualiser</b-button>
     <l-tile-layer :url="url"> </l-tile-layer>
-    <point v-for="point in points" :key="point.id" :point="point"> </point>
+    <point v-for="p in points" :key="p.id" :point="p"> </point>
   </l-map>
 </template>
 
@@ -23,7 +24,7 @@ export default {
     LTileLayer,
     point,
   },
-  
+
   props: {
     idUser: Array,
   },
@@ -34,8 +35,8 @@ export default {
       center: [49.1193089, 6.1757156],
       zoom: 5,
       points: [],
-      users: {},
-      uniqueId: [],
+      pointsinit: [],
+      init: false,
     };
   },
 
@@ -43,21 +44,8 @@ export default {
     this.getUserEsp();
     console.log();
     console.log("iduser  map : ", this.idUser);
-    setTimeout(() => {
-      this.getUniqueID();
-    }, 2000);
-    
   },
   methods: {
-    getUniqueID() {
-      this.idUser.forEach((c) => {
-        if (!this.uniqueId.includes(c)) {
-          this.uniqueId.push(c);
-        }
-      });
-      console.log("uniqueid : " + this.uniqueId);
-    },
-
     zoomUpdated(zoom) {
       this.zoom = zoom;
     },
@@ -65,11 +53,9 @@ export default {
       this.center = center;
     },
     getUserEsp() {
+      console.log(" init ? : " + this.init);
       var data = JSON.stringify({
         collection: "Data",
-        filter: {
-          "info.user": "dfdfddf11996",
-        },
         database: "DataMonitoring",
         dataSource: "Cluster0",
         projection: {
@@ -94,20 +80,52 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           console.log(json);
-          const obj = {
-            id: json.documents[0].info.user,
-            imageUrl: "https://cdn-icons-png.flaticon.com/512/2540/2540201.png",
-            coordinates: [
-              parseFloat(json.documents[0].status.lat),
-              parseFloat(json.documents[0].status.lgn),
-            ],
-            temperature: json.documents[0].status.temperature,
-            lumens: json.documents[0].status.light,
-            loc: json.documents[0].info.loc,
-            user: json.documents[0].info.user,
-          };
-          this.points.push(obj);
-          console.log("points : " + JSON.stringify(obj));
+          if (!this.init) {
+            console.log("firt init !");
+            for (let index = 0; index < json.documents.length; index++) {
+              const obj = {
+                id: json.documents[index].info.user,
+                imageUrl:
+                  "https://cdn-icons-png.flaticon.com/512/2540/2540201.png",
+                coordinates: [
+                  parseFloat(json.documents[index].status.lat),
+                  parseFloat(json.documents[index].status.lgn),
+                ],
+                temperature: json.documents[index].status.temperature,
+                lumens: json.documents[index].status.light,
+                loc: json.documents[index].info.loc,
+                user: json.documents[index].info.user,
+              };
+
+              this.points.push(obj);
+
+              console.log("points : " + JSON.stringify(obj));
+            }
+          } else {
+            console.log("second init !");
+            this.pointsinit = [];
+            for (let index = 0; index < json.documents.length; index++) {
+              const obj = {
+                id: json.documents[index].info.user,
+                imageUrl:
+                  "https://cdn-icons-png.flaticon.com/512/2540/2540201.png",
+                coordinates: [
+                  parseFloat(json.documents[index].status.lat),
+                  parseFloat(json.documents[index].status.lgn),
+                ],
+                temperature: json.documents[index].status.temperature,
+                lumens: json.documents[index].status.light,
+                loc: json.documents[index].info.loc,
+                user: json.documents[index].info.user,
+              };
+
+              this.pointsinit.push(obj);
+
+              console.log("points : " + JSON.stringify(obj));
+            }
+            this.points = this.pointsinit;
+          }
+          this.init = true;
         });
     },
     getPoints() {
@@ -132,6 +150,13 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  z-index: 0;
+}
+.position {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  z-index: 500;
 }
 </style>

@@ -10,6 +10,7 @@
         <div class="navbar-start">
           <router-link class="navbar-item" to="/">World Map</router-link>
           <router-link class="navbar-item" to="/Ville">Ville</router-link>
+          <router-link class="navbar-item" to="/Dashboard">Dashboard</router-link>
         </div>
       </div>
     </nav>
@@ -60,8 +61,11 @@ export default {
         .then((json) => {
           console.log("json legth : ", json.documents.length);
           for (let index = 0; index < json.documents.length; index++) {
-            this.idUser.push(json.documents[index].info.user);
+            if (!this.idUser.includes(json.documents[index].info.user)) {
+              this.idUser.push(json.documents[index].info.user);
+            }
           }
+
           console.log("idusers : " + this.idUser);
         });
     },

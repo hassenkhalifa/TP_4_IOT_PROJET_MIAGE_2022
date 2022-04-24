@@ -5,10 +5,10 @@
 #include "DallasTemperature.h"
 
 // WiFi
-//const char *ssid = "Freebox-08247B"; // Enter your WiFi name
-//const char *password = "0493705536";  // Enter WiFi password
-const char *ssid = "HKN"; // Enter your WiFi name
-const char *password = "12345678";  // Enter WiFi password
+const char *ssid = "Freebox-08247B"; // Enter your WiFi name
+const char *password = "0493705536";  // Enter WiFi password
+//const char *ssid = "HKN"; // Enter your WiFi name
+//const char *password = "12345678";  // Enter WiFi password
 
 const char *lat = "43.63386535644531"; //coordoné 24 Chemin de Saint-Marc, Grasse, France
 const char *lgn = "6.961919784545898"; 
@@ -71,15 +71,22 @@ void setup() {
   pinMode(ledPin2, OUTPUT);
 }
 void publishinfo(String temps, String light, String Ip, String Mac, String SSiD, String CoolerStatus, String HeaterStatus) {
+  int random_int = random(25, 55);
+    float random_float = random_int / 1.0;
+    int random_int2 = random(5, 15);
+    float random_float2 = random_int2 / 1.0;
+    int random_int3 = random(1000,9999);
   DynamicJsonDocument doc(2048);
   doc["status"]["temperature"] = temps;
   doc["status"]["light"] = light;
   doc["status"]["ledCooler"] = CoolerStatus;
   doc["status"]["ledHeater"] = HeaterStatus;
   doc["status"]["running"] = "RUNNING";
+  doc["status"]["lat"] = random_float;
+  doc["status"]["lgn"] = random_float2;
 
   doc["info"]["loc"] = "Grasse";
-  doc["info"]["user"] = "21711996";
+  doc["info"]["user"] = random_int3;
 //  doc["info"]["uptime"] = "getUptime()";
 //  doc["info"]["ssid"] = SSiD;
 //  doc["info"]["ident"] = Mac;

@@ -42,26 +42,23 @@
       >
         {{ props.row.loc }}
       </b-table-column>
-      <b-table-column
-        field="id"
-        label="Utilisateur"
-        width="40"
-        sortable
-        numeric
-        v-slot="props"
-      >
-        {{ props.row.user }}
+      <b-table-column>
+        <b-button type="is-info" icon-left="magnify"></b-button>
       </b-table-column>
     </b-table>
+    <div>
+    <Chart></Chart>
+    </div>
   </section>
 </template>
 
 
 <script>
+import Chart from "./Charts";
 export default {
   data() {
     const data = [];
-
+    
     return {
       data,
       isPaginated: true,
@@ -78,6 +75,9 @@ export default {
       inputPosition: "",
       inputDebounce: "",
     };
+  },
+  components: {
+    Chart,
   },
   created() {
     this.getUserEsp();
@@ -161,3 +161,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.samples {
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: 20px auto;
+}
+</style>

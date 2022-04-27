@@ -20,6 +20,8 @@
       :pagination-order="paginationOrder"
       :page-input-position="inputPosition"
       :debounce-page-input="inputDebounce"
+      :selected.sync="selected"
+      focusable
     >
       <b-table-column
         field="id"
@@ -42,12 +44,10 @@
       >
         {{ props.row.loc }}
       </b-table-column>
-      <b-table-column>
-        <b-button type="is-info" icon-left="magnify"></b-button>
-      </b-table-column>
+      
     </b-table>
-    <div>
-    <Chart></Chart>
+    <div v-if="selected">
+      <Chart :user="selected"></Chart>
     </div>
   </section>
 </template>
@@ -58,9 +58,11 @@ import Chart from "./Charts";
 export default {
   data() {
     const data = [];
-    
+
     return {
       data,
+
+      selected: data[1],
       isPaginated: true,
       isPaginationSimple: false,
       isPaginationRounded: false,
@@ -83,6 +85,9 @@ export default {
     this.getUserEsp();
   },
   methods: {
+    setUser(user) {
+      console.log("user utiliser : " + user);
+    },
     dateThAttrs(column) {
       return column.label === "Date"
         ? {
@@ -145,7 +150,7 @@ export default {
             console.log("firt init !");
             for (let index = 0; index < json.documents.length; index++) {
               const obj = {
-                id: json.documents[index].info.user,
+                id: json.documents[index]._id,
 
                 loc: json.documents[index].info.loc,
                 user: json.documents[index].info.user,

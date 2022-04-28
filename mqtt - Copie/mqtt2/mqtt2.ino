@@ -3,15 +3,21 @@
 #include "ArduinoJson.h"
 #include "OneWire.h"
 #include "DallasTemperature.h"
+#include "time.h"
 
 // WiFi
-const char *ssid = "Freebox-08247B"; // Enter your WiFi name
-const char *password = "0493705536";  // Enter WiFi password
-//const char *ssid = "HKN"; // Enter your WiFi name
-//const char *password = "12345678";  // Enter WiFi password
+//const char *ssid = "Freebox-08247B"; // Enter your WiFi name
+//const char *password = "0493705536";  // Enter WiFi password
+const char *ssid = "HKN"; // Enter your WiFi name
+const char *password = "12345678";  // Enter WiFi password
 
-const char *lat = "43.63386535644531"; //coordoné 24 Chemin de Saint-Marc, Grasse, France
-const char *lgn = "6.961919784545898"; 
+
+const char* ntpServer = "pool.ntp.org";
+const long  gmtOffset_sec = 3600;
+const int   daylightOffset_sec = 3600;
+
+//const char *lat = "43.63386535644531"; //coordoné 24 Chemin de Saint-Marc, Grasse, France
+//const char *lgn = "6.961919784545898";
 
 const int ledPin = 19;
 const int ledPin2 = 18;
@@ -21,7 +27,7 @@ String HeaterStatus;
 
 const int LightPin = A5;
 
-OneWire oneWire(23); 
+OneWire oneWire(23);
 DallasTemperature tempSensor(&oneWire) ;
 
 // MQTT Broker
@@ -55,58 +61,63 @@ void setup() {
   client.setServer(mqtt_broker, mqtt_port);
   client.setCallback(callback);
   while (!client.connected()) {
-     String client_id = "esp32-client-";
-     client_id += String(WiFi.macAddress());
-     Serial.printf("The client %s connects to the public mqtt broker\n", client_id.c_str());
-     if (client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
-         Serial.println("Public emqx mqtt broker connected");
-     } else {
-         Serial.print("failed with state ");
-         Serial.print(client.state());
-         delay(2000);
-     }
- }
-  
+    String client_id = "esp32-client-";
+    client_id += String(WiFi.macAddress());
+    Serial.printf("The client %s connects to the public mqtt broker\n", client_id.c_str());
+    if (client.connect(client_id.c_str(), mqtt_username, mqtt_password)) {
+      Serial.println("Public emqx mqtt broker connected");
+    } else {
+      Serial.print("failed with state ");
+      Serial.print(client.state());
+      delay(2000);
+    }
+  }
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);
   pinMode(ledPin, OUTPUT);
   pinMode(ledPin2, OUTPUT);
 }
-void publishinfo(String temps, String light, String Ip, String Mac, String SSiD, String CoolerStatus, String HeaterStatus) {
+
+String printLocalTime()
+{
+  char timeSend[45];
+
+  String formatTime;
+  struct tm timeinfo;
+  if (!getLocalTime(&timeinfo)) {
+    Serial.println("Failed to obtain time");
+    
+  }
+  //Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
+  strftime(timeSend, 45, "%A, %B %d %Y %H:%M:%S", &timeinfo);
+  Serial.println(timeSend);
+  formatTime = String(timeSend);
+  return formatTime;
+}
+
+void publishinfo(String temps, String light, String Ip, String Mac, String SSiD, String CoolerStatus, String HeaterStatus, String timeSend ) {
   int random_int = random(25, 55);
-    float random_float = random_int / 1.0;
-    int random_int2 = random(5, 15);
-    float random_float2 = random_int2 / 1.0;
-    int random_int3 = random(1000,9999);
-  DynamicJsonDocument doc(2048);
+  float random_float = random_int / 1.0;
+  int random_int2 = random(5, 15);
+  float random_float2 = random_int2 / 1.0;
+  int random_int3 = random(1000, 9999);
+  DynamicJsonDocument doc(4096);
   doc["status"]["temperature"] = temps;
   doc["status"]["light"] = light;
   doc["status"]["ledCooler"] = CoolerStatus;
   doc["status"]["ledHeater"] = HeaterStatus;
-  doc["status"]["running"] = "RUNNING";
   doc["status"]["lat"] = random_float;
   doc["status"]["lgn"] = random_float2;
 
-  doc["info"]["loc"] = "Grasse";
-  doc["info"]["user"] = random_int3;
-//  doc["info"]["uptime"] = "getUptime()";
-//  doc["info"]["ssid"] = SSiD;
-//  doc["info"]["ident"] = Mac;
-//  doc["info"]["ip"] = Ip;
-//
-//  doc["reporthost"]["target_ip"] = "target_ip";
-//  doc["reporthost"]["target_port"] = "target_port";
-//  doc["reporthost"]["sp"] = "target_sp";
-//  
-//  doc["regul"]["threshold"] = "DAY_LIGHT";
-//  doc["regul"]["sbn"] = "TEMP_NIGHT_LOW";
-//  doc["regul"]["shn"] = "TEMP_NIGHT_HIGH";
-//  doc["regul"]["sbj"] = "TEMP_DAY_LOW";
-//  doc["regul"]["shj"] = "TEMP_DAY_HIGH";
-//
-//  doc["lat"] = lat;
-//  doc["lgn"] = lgn;
+  //  doc["info"]["loc"] = "Grasse";
+  //  doc["info"]["user"] = random_int3;
+  doc["info"]["time"] = timeSend;
+  //  doc["info"]["ip"] = Ip;
+  //  doc["info"]["ident"] = Mac;
+
+
   String json;
   serializeJson(doc, json);
-  char jsonChar[200];
+  char jsonChar[4096];
 
   json.toCharArray(jsonChar, 200);
   client.publish(topic, jsonChar);
@@ -143,9 +154,11 @@ void loop() {
     CoolerStatus = "on";
     HeaterStatus = "off";
   }
-  publishinfo(get_temperature(tempSensor), get_light(LightPin), get_Ip().c_str(), get_Mac(), get_Ssid(), get_CoolerStatus(), get_HeaterStatus());
+  publishinfo(get_temperature(tempSensor), get_light(LightPin), get_Ip().c_str(), get_Mac(), get_Ssid(), get_CoolerStatus(), get_HeaterStatus(),printLocalTime());
+
+  printLocalTime();
   client.loop();
-    
+
 
   delay(1000);
 }

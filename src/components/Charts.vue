@@ -108,7 +108,10 @@ export default {
     };
   },
   created() {
-    this.getDataFromUser(this.user.id);
+    setTimeout(() => {
+      this.getDataFromUser(this.user.id);
+    }, 5000);
+    
   },
   methods: {
     getDataFromUser(user) {
@@ -117,11 +120,9 @@ export default {
       console.log("selectUser : " + selectUser);
       var data = JSON.stringify({
         collection: "Data",
-        
         database: "DataMonitoring",
-
         dataSource: "Cluster0",
-        filter:{ 'document.info.user':1872},
+        filter:{ user:'3753'},
         projection: {
           status: 1,
           info: 1,

@@ -44,6 +44,26 @@
       >
         {{ props.row.loc }}
       </b-table-column>
+      <b-table-column
+        field="id"
+        label="Utilisateur"
+        width="40"
+        sortable
+        numeric
+        v-slot="props"
+      >
+        {{ props.row.user }}
+      </b-table-column>
+      <b-table-column
+        field="id"
+        label="Date"
+        width="40"
+        sortable
+        numeric
+        v-slot="props"
+      >
+        {{ props.row.time }}
+      </b-table-column>
       
     </b-table>
     <div v-if="selected">

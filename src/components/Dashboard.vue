@@ -102,7 +102,10 @@ export default {
     Chart,
   },
   created() {
-    this.getUserEsp();
+    setTimeout(() => {
+      this.getUserEsp();
+    }, 0);
+    
   },
   methods: {
     setUser(user) {

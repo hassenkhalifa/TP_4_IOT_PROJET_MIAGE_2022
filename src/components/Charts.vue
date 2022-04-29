@@ -7,17 +7,19 @@
         @click="this.getDataFromUser(this.user.id)"
       ></b-button>
     </div>
-    <LineChartGenerator
-      :chart-options="chartOptions"
-      :chart-data="chartData"
-      :chart-id="chartId"
-      :dataset-id-key="datasetIdKey"
-      :plugins="plugins"
-      :css-classes="cssClasses"
-      :styles="styles"
-      :width="width"
-      :height="height"
-    />
+    <div v-if="isFinish">
+      <LineChartGenerator
+        :chart-options="chartOptions"
+        :chart-data="chartData"
+        :chart-id="chartId"
+        :dataset-id-key="datasetIdKey"
+        :plugins="plugins"
+        :css-classes="cssClasses"
+        :styles="styles"
+        :width="width"
+        :height="height"
+      />
+    </div>
   </section>
 </template>
 
@@ -83,21 +85,15 @@ export default {
   },
   data() {
     return {
+      isFinish: false,
+      results: [],
       chartData: {
-        labels: [
-          "19:48:53",
-          "19:48:55",
-          "19:48:59",
-          "19:49:01",
-          "19:48:53",
-          "19:48:53",
-          "19:48:53",
-        ],
+        labels: [],
         datasets: [
           {
             label: "Data One",
             backgroundColor: "#f87979",
-            data: [40.9, 39, 10, 40, 39, 80, 40],
+            data: [],
           },
         ],
       },
@@ -111,7 +107,6 @@ export default {
     setTimeout(() => {
       this.getDataFromUser(this.user.id);
     }, 5000);
-    
   },
   methods: {
     getDataFromUser(user) {
@@ -122,7 +117,7 @@ export default {
         collection: "Data",
         database: "DataMonitoring",
         dataSource: "Cluster0",
-        filter:{ user:'3753'},
+        filter:{'info.user':3753},
         projection: {
           status: 1,
           info: 1,
@@ -130,7 +125,7 @@ export default {
       });
 
       fetch(
-        "http://localhost:8080/app/data-grsmg/endpoint/data/beta/action/findOne",
+        "http://localhost:8080/app/data-grsmg/endpoint/data/beta/action/find",
         {
           method: "POST",
           body: data,
@@ -144,8 +139,27 @@ export default {
       )
         .then((response) => response.json())
         .then((json) => {
-          console.log("userselect  :", JSON.stringify(json));
+          this.results = json;
+          console.log("userselect  :", JSON.stringify(this.results));
         });
+      if (this.results) {
+        for (let index = 0; index < this.results.length; index++) {
+          if (this.user.user === this.results.documents[index].info.user) {
+            this.chartData.datasets[0].data.push(
+              parseFloat(this.results.documents[index].status.temperature)
+            );
+            this.chartData.labels.push("19:48:53");
+          }
+        }
+        console.log(
+          "labels",
+          this.chartData.labels,
+          "data",
+          this.chartData.datasets[0].data
+        );
+
+        this.isFinish = true;
+      }
     },
   },
 };

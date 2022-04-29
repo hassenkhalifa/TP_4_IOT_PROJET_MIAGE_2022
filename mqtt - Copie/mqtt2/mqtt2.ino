@@ -85,7 +85,7 @@ String printLocalTime()
   struct tm timeinfo;
   if (!getLocalTime(&timeinfo)) {
     Serial.println("Failed to obtain time");
-    
+
   }
   //Serial.println(&timeinfo, "%A, %B %d %Y %H:%M:%S");
   strftime(timeSend, 45, "%A, %B %d %Y %H:%M:%S", &timeinfo);
@@ -108,8 +108,8 @@ void publishinfo(String temps, String light, String Ip, String Mac, String SSiD,
   doc["status"]["lat"] = random_float;
   doc["status"]["lgn"] = random_float2;
 
-  //  doc["info"]["loc"] = "Grasse";
-  //  doc["info"]["user"] = random_int3;
+  doc["info"]["loc"] = "Grasse";
+  doc["info"]["user"] = random_int3;
   doc["info"]["time"] = timeSend;
   //  doc["info"]["ip"] = Ip;
   //  doc["info"]["ident"] = Mac;
@@ -154,7 +154,7 @@ void loop() {
     CoolerStatus = "on";
     HeaterStatus = "off";
   }
-  publishinfo(get_temperature(tempSensor), get_light(LightPin), get_Ip().c_str(), get_Mac(), get_Ssid(), get_CoolerStatus(), get_HeaterStatus(),printLocalTime());
+  publishinfo(get_temperature(tempSensor), get_light(LightPin), get_Ip().c_str(), get_Mac(), get_Ssid(), get_CoolerStatus(), get_HeaterStatus(), printLocalTime());
 
   printLocalTime();
   client.loop();

@@ -195,7 +195,7 @@ export default {
       });
 
       fetch(
-        "http://localhost:8080/app/data-grsmg/endpoint/data/beta/action/findOne",
+        "https://data.mongodb-api.com/app/data-grsmg/endpoint/data/beta/action/findOne",
         {
           method: "POST",
           body: data,

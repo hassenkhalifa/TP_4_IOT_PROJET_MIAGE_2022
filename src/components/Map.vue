@@ -80,7 +80,7 @@ export default {
       });
 
       fetch(
-        "http://localhost:3000/app/data-grsmg/endpoint/data/beta/action/findOne",
+        "http://localhost:8080/app/data-grsmg/endpoint/data/beta/action/findOne",
         {
           method: "POST",
           body: data,

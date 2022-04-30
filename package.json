@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "mqtt": "node Serveur2/mqtt2.js",
-    "start": "node server.js && node mqtt2.js"
+    "start": "node server.js "
   },
   "dependencies": {
     "axios": "^0.26.1",

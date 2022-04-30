@@ -45,14 +45,13 @@ export default {
       });
 
       fetch(
-        "https://data.mongodb-api.com/app/data-grsmg/endpoint/data/beta/action/find",
+        "http://localhost:3000/app/data-grsmg/endpoint/data/beta/action/find",
         {
           method: "POST",
           body: data,
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Request-Headers": "*",
-            "Access-Control-Allow-Origin":"*",
             "api-key":
               "pP3dYqzJQwzxhlj24CfIKPTHAy8LcAf4W2YdpRXbvmEXhh8LHLNOGSAabuO5QS7k",
           },

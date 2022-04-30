@@ -45,7 +45,7 @@ export default {
       });
 
       fetch(
-        "https://cors-anywhere.herokuapp.com/https://data.mongodb-api.com/app/data-grsmg/endpoint/data/beta/action/find",
+        "https://thingproxy.freeboard.io/fetch/https://data.mongodb-api.com/app/data-grsmg/endpoint/data/beta/action/find",
         {
           method: "POST",
           body: data,

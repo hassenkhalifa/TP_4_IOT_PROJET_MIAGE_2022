@@ -28,7 +28,7 @@ export default {
     return {
       nom: "",
       key: "9c0f6b0bd3e3abbcc0c9ad3bdee77677",
-      url: "https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/",
+      url: "https://thingproxy.freeboard.io/fetch/http://api.openweathermap.org/data/2.5/",
       temps: {},
       notEmpty: false,
     };

@@ -121,7 +121,7 @@ export default {
       });
 
       fetch(
-        "http://localhost:3000/app/data-grsmg/endpoint/data/beta/action/find",
+        "https://data.mongodb-api.com/app/data-grsmg/endpoint/data/beta/action/find",
         {
           method: "POST",
           body: data,

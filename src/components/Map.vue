@@ -87,6 +87,7 @@ export default {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Request-Headers": "*",
+            "Access-Control-Allow-Origin":"*",
             "api-key":
               "pP3dYqzJQwzxhlj24CfIKPTHAy8LcAf4W2YdpRXbvmEXhh8LHLNOGSAabuO5QS7k",
           },

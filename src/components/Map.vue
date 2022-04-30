@@ -12,11 +12,12 @@
       type="is-primary"
       class="position"
       icon-left="refresh"
-      @click="getUserEsp()"
+      @click="getPoints()"
     >
       Actualiser</b-button
     >
     <l-tile-layer :url="url"> </l-tile-layer>
+
     <point v-for="p in points" :key="p.id" :point="p"> </point>
   </l-map>
 </template>
@@ -48,8 +49,9 @@ export default {
   },
 
   created() {
-    this.getUserEsp(this.idUser);
-    console.log();
+    let requests = this.idUser.map((user) => this.getUserEsp(user));
+    Promise.all(requests);
+
     console.log("iduser  map : ", this.idUser);
   },
   methods: {
@@ -59,13 +61,18 @@ export default {
     centerUpdated(center) {
       this.center = center;
     },
+    getPoints() {
+      this.points = [];
+      let requests = this.idUser.map((user) => this.getUserEsp(user));
+      Promise.all(requests);
+    },
     getUserEsp(user) {
       console.log(" init ? : " + this.init);
       var data = JSON.stringify({
         collection: "Data",
         database: "DataMonitoring",
         dataSource: "Cluster0",
-        filter: { "info.user": user[0] },
+        filter: { "info.user": user },
         projection: {
           status: 1,
           info: 1,
@@ -88,65 +95,25 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           console.log(json);
-          if (!this.init) {
-            console.log("firt init !");
-            const obj = {
-              id: json.documents.info.user,
-              imageUrl:
-                "https://cdn-icons-png.flaticon.com/512/2540/2540201.png",
-              coordinates: [
-                parseFloat(json.documents.status.lat),
-                parseFloat(json.documents.status.lgn),
-              ],
-              temperature: json.documents.status.temperature,
-              lumens: json.documents.status.light,
-              loc: json.documents.info.loc,
-              user: json.documents.info.user,
-            };
 
-            this.points.push(obj);
+          console.log("firt init !");
+          const obj = {
+            id: json.document.info.user,
+            imageUrl: "https://cdn-icons-png.flaticon.com/512/2540/2540201.png",
+            coordinates: [
+              parseFloat(json.document.status.lat),
+              parseFloat(json.document.status.lgn),
+            ],
+            temperature: json.document.status.temperature,
+            lumens: json.document.status.light,
+            loc: json.document.info.loc,
+            user: json.document.info.user,
+          };
 
-            console.log("points : " + JSON.stringify(obj));
-          }
-          if (!this.init) {
-            console.log("second init !");
-            this.pointsinit = [];
+          this.points.push(obj);
 
-            const obj = {
-              id: json.documents.info.user,
-              imageUrl:
-                "https://cdn-icons-png.flaticon.com/512/2540/2540201.png",
-              coordinates: [
-                parseFloat(json.documents.status.lat),
-                parseFloat(json.documents.status.lgn),
-              ],
-              temperature: json.documents.status.temperature,
-              lumens: json.documents.status.light,
-              loc: json.documents.info.loc,
-              user: json.documents.info.user,
-            };
-
-            this.pointsinit.push(obj);
-
-            console.log("points : " + JSON.stringify(obj));
-
-            this.points = this.pointsinit;
-          }
-          this.init = true;
+          console.log("points : " + JSON.stringify(obj));
         });
-    },
-    getPoints() {
-      const obj = {
-        id: this.users.documents[0].info.user,
-        imageUrl: "https://cdn-icons-png.flaticon.com/512/2540/2540201.png",
-        coordinates: [
-          parseFloat(this.users.documents[0].status.lat),
-          parseFloat(this.users.documents[0].status.lgn),
-        ],
-        loc: this.users.documents[0].info.loc,
-      };
-      this.points = obj;
-      console.log("points : " + JSON.stringify(obj));
     },
   },
 };

@@ -1,12 +1,5 @@
 <template>
   <section>
-    <div>
-      <b-button
-        type="is-info"
-        icon-left="refresh"
-        @click="this.getDataFromUser(this.user.id)"
-      ></b-button>
-    </div>
     <div v-if="isFinish">
       <LineChartGenerator
         :chart-options="chartOptions"
@@ -86,13 +79,17 @@ export default {
   data() {
     return {
       isFinish: false,
-      results: [],
       chartData: {
         labels: [],
         datasets: [
           {
-            label: "Data One",
+            label: "Temperatures",
             backgroundColor: "#f87979",
+            data: [],
+          },
+          {
+            label: "Lumens",
+            backgroundColor: "#000000",
             data: [],
           },
         ],
@@ -104,9 +101,8 @@ export default {
     };
   },
   created() {
-    setTimeout(() => {
-      this.getDataFromUser(this.user.id);
-    }, 5000);
+    this.getDataFromUser(this.user.user);
+    console.log("user chart :", this.user);
   },
   methods: {
     getDataFromUser(user) {
@@ -117,7 +113,7 @@ export default {
         collection: "Data",
         database: "DataMonitoring",
         dataSource: "Cluster0",
-        filter:{'info.user':3753},
+        filter: { "info.user": user },
         projection: {
           status: 1,
           info: 1,
@@ -139,27 +135,49 @@ export default {
       )
         .then((response) => response.json())
         .then((json) => {
-          this.results = json;
-          console.log("userselect  :", JSON.stringify(this.results));
-        });
-      if (this.results) {
-        for (let index = 0; index < this.results.length; index++) {
-          if (this.user.user === this.results.documents[index].info.user) {
-            this.chartData.datasets[0].data.push(
-              parseFloat(this.results.documents[index].status.temperature)
-            );
-            this.chartData.labels.push("19:48:53");
-          }
-        }
-        console.log(
-          "labels",
-          this.chartData.labels,
-          "data",
-          this.chartData.datasets[0].data
-        );
+          console.log("userselect  :", json);
+          for (let index = 0; index < json.documents.length; index++) {
+            this.chartData.labels.push(json.documents[index].info.time);
 
-        this.isFinish = true;
-      }
+            this.chartData.datasets[0].data.push(
+              parseFloat(json.documents[index].status.temperature)
+            );
+
+            this.chartData.datasets[1].data.push(
+              parseInt(json.documents[index].status.light)
+            );
+          }
+          let valBegin = this.chartData.datasets[1].data.length - 10;
+          if (valBegin <= 0) {
+            valBegin = 0;
+          }
+          this.chartData.datasets[1].data =
+            this.chartData.datasets[1].data.slice(
+              valBegin,
+              this.chartData.datasets[1].data.length
+            );
+          valBegin = this.chartData.datasets[0].data.length - 10;
+          if (valBegin <= 0) {
+            valBegin = 0;
+          }
+          this.chartData.datasets[0].data =
+            this.chartData.datasets[0].data.slice(
+              valBegin,
+              this.chartData.datasets[0].data.length
+            );
+          valBegin = this.chartData.labels.length - 10;
+          if (valBegin <= 0) {
+            valBegin = 0;
+          }
+          this.chartData.labels = this.chartData.labels.slice(
+            valBegin,
+            this.chartData.labels.length
+          );
+
+          console.log("labels :", this.chartData.labels);
+          console.log("dataset data :", this.chartData.datasets[0].data);
+          this.isFinish = true;
+        });
     },
   },
 };

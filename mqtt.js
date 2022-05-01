@@ -1,30 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var mqtt = require('mqtt')
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb+srv://hassen:HaldQSCGIUdOaW8f@cluster0.1blp0.mongodb.net/Datamonitoring?retryWrites=true&w=majority";

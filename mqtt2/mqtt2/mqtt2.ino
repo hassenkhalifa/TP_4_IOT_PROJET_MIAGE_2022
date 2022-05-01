@@ -36,17 +36,17 @@ float random_float2 = random_int2 / 1.0;
 int random_int3 = random(1000, 9999);
 
 // MQTT Broker
-//  const char *mqtt_broker = "test.mosquitto.org";
-//  const char *topic = "iot/M1Miage2022";
-//  const char *mqtt_username = "darkvador";
-//  const char *mqtt_password = "6poD2R2";
-//  const int mqtt_port = 1883;
+  const char *mqtt_broker = "test.mosquitto.org";
+  const char *topic = "iot/M1Miage2022";
+  const char *mqtt_username = "darkvador";
+  const char *mqtt_password = "6poD2R2";
+  const int mqtt_port = 1883;
 
-const char *mqtt_broker = "j20ae20e.us-east-1.emqx.cloud";
-const char *topic = "esp32/test";
-const char *mqtt_username = "HassenTest";
-const char *mqtt_password = "12345678";
-const int mqtt_port = 15304;
+//const char *mqtt_broker = "j20ae20e.us-east-1.emqx.cloud";
+//const char *topic = "esp32/test";
+//const char *mqtt_username = "HassenTest";
+//const char *mqtt_password = "12345678";
+//const int mqtt_port = 15304;
 
 WiFiClient espClient;
 PubSubClient client(espClient);

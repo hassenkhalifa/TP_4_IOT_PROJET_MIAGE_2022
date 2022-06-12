@@ -195,7 +195,7 @@ export default {
       });
 
       fetch(
-        "https://api.codetabs.com/v1/proxy?quest=https://data.mongodb-api.com/app/data-grsmg/endpoint/data/beta/action/findOne",
+        "https://thingproxy.freeboard.io/fetch/https://data.mongodb-api.com/app/data-grsmg/endpoint/data/beta/action/findOne",
         {
           method: "POST",
           body: data,

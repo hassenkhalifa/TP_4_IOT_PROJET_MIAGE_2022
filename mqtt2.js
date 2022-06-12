@@ -33,6 +33,7 @@ function json_check(data) {
   try {
       JSON.parse(data);
   } catch (e) {
+    console.log("marche pas");
       return false;
   }
   console.log("ca marche pour l'instant")
